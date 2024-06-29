@@ -1,8 +1,5 @@
 # neorg-refactor-ls
 
-> [!WARNING]
-> this doesn't work right now. Waiting on a PR to get merged into neorg
-
 Rename files and headers in your norg files without breaking links in the rest of the workspace.
 
 ---

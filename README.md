@@ -1,5 +1,8 @@
 # neorg-refactor-ls
 
+> [!WARNING]
+> this doesn't work right now. Waiting on a PR to get merged into neorg
+
 Rename files and headers in your norg files without breaking links in the rest of the workspace.
 
 ---
@@ -36,7 +39,7 @@ Install this plugin and load it by adding this to your neorg config:
 ["external.interim-ls"] = {},
 ```
 
-There is no config. Keybinds should be setup by you in an autocommand on the `LSPAttach` event.
+There is no config. Keybinds should be setup by you in an autocommand on the `LspAttach` event.
 Please note the only action you will need for this LS is the rename action, but this autocommand is
 used for _all_ of your configured language servers.
 

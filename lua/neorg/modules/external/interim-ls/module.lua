@@ -76,7 +76,6 @@ module.load = function()
             },
         },
     })
-    -- TODO: how would I get types in here?
     ---@type core.integrations.treesitter
     ts = module.required["core.integrations.treesitter"]
     dirman = module.required["core.dirman"]

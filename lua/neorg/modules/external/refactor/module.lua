@@ -123,7 +123,7 @@ module.public = {
                     ---@type PathlibPath | nil
                     local new_link
                     if rel then
-                        new_link = Path(new_path):relative_to(Path(file))
+                        new_link = Path(new_path):relative_to(Path(file):parent())
                         if not new_link then
                             return
                         end

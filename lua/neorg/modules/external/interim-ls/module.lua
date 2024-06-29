@@ -103,7 +103,7 @@ module.private.handlers = {
                                 {
                                     pattern = {
                                         matches = "file",
-                                        glob = "*.norg",
+                                        glob = "**/*.norg",
                                     },
                                 },
                             },

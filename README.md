@@ -1,4 +1,4 @@
-# neorg-refactor-ls
+# neorg-interim-ls
 
 Rename files and headers in your norg files without breaking links in the rest of the workspace.
 

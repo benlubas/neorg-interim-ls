@@ -30,7 +30,7 @@ line)
 
 ## Install
 
-Install this plugin and load it by adding this to your neorg config:
+Install this plugin the way you would any other, and load it by adding this to your neorg config:
 
 ```lua
 ["external.interim-ls"] = {},

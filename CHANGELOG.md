@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/benlubas/neorg-interim-ls/compare/v1.0.0...v1.0.1) (2024-07-02)
+
+
+### Bug Fixes
+
+* **refactor:** find and update anchor definitions as well ([b26215f](https://github.com/benlubas/neorg-interim-ls/commit/b26215fed07d08398f6ab6d5fef6aef62034df3e))
+
 ## 1.0.0 (2024-06-30)
 
 

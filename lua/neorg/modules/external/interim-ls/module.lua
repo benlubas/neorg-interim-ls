@@ -76,7 +76,6 @@ module.load = function()
             },
         },
     })
-    -- TODO: how would I get types in here?
     ---@type core.integrations.treesitter
     ts = module.required["core.integrations.treesitter"]
     dirman = module.required["core.dirman"]
@@ -192,16 +191,6 @@ module.on_event = function(event)
         module.private[event.split_type[2]](event)
     end
 end
-
----@class NodeText
----@field range Range
----@field text string
-
----@class Link
----@field file? NodeText
----@field type? NodeText
----@field text? NodeText
----@field range Range range of the entire link
 
 module.private["interim-ls.rename.file"] = function(event)
     local new_path = event.content[1]

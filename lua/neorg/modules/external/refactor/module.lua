@@ -339,11 +339,10 @@ end
 ---@return Link[]
 module.private.get_links = function(source)
     local link_query_string = [[
-        (link
-          (link_location
+        (link_location
             file: (_)* @file
             type: (_)* @type
-            text: (_)* @text) @link_location)
+            text: (_)* @text) @link_location
     ]]
     local norg_parser
     local iter_src

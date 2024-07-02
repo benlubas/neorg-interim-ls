@@ -192,16 +192,6 @@ module.on_event = function(event)
     end
 end
 
----@class NodeText
----@field range Range
----@field text string
-
----@class Link
----@field file? NodeText
----@field type? NodeText
----@field text? NodeText
----@field range Range range of the entire link
-
 module.private["interim-ls.rename.file"] = function(event)
     local new_path = event.content[1]
     local current = vim.api.nvim_buf_get_name(0)

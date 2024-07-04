@@ -22,12 +22,6 @@ that doesn't exist will create the folder.
 - Links that include a file path to their own file (ie. `{:path/to/blah:}` while in `blah.norg`)
   are not supported. But like, just don't do that.
 
-## Commands
-
-- `Neorg ls rename file` - open a popup to rename the current file
-- `Neorg ls rename header` - open a popup to rename the current header (must be used on a heading
-line)
-
 ## Install
 
 Install this plugin the way you would any other, and load it by adding this to your neorg config:
@@ -61,6 +55,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 ## Usage
 
+This plugin can be used just like any other LSP:
 - rename a heading: done with `:h vim.lsp.buf.rename()`
 - rename/move a file: handled by `willRename` which is supported by some file manager plugins such
 as [Oil.nvim](https://github.com/steavearc/oil.nvim)
+
+Additionally, there are Neorg commands that that can accomplish the same things (though they are less convienient):
+- `:Neorg lsp rename file`
+- `:Neorg lsp rename heading`

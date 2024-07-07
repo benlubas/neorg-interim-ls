@@ -50,6 +50,13 @@ module.setup = function()
     }
 end
 
+module.config.public = {
+    completion_provider = {
+        -- Enable or disable the completion provider
+        enable = true,
+    },
+}
+
 local dirman, refactor, ts
 module.load = function()
     module.required["core.neorgcmd"].add_commands_from_table({
@@ -93,13 +100,6 @@ module.private.handlers = {
     ["initialize"] = function(_params, callback, _notify_reply_callback)
         local initializeResult = {
             capabilities = {
-                completionProvider = {
-                    triggerCharacters = { "@", "-", "(", " ", ".", ":", "#", "*", "^", "[" },
-                    resolveProvider = false,
-                    completionItem = {
-                        labelDetailsSupport = true,
-                    },
-                },
                 renameProvider = {
                     prepareProvider = true,
                 },
@@ -124,6 +124,17 @@ module.private.handlers = {
                 version = "0.0.1",
             },
         }
+
+        if module.config.public.completion_provider.enable then
+            initializeResult.capabilities.completionProvider = {
+                triggerCharacters = { "@", "-", "(", " ", ".", ":", "#", "*", "^", "[" },
+                resolveProvider = false,
+                completionItem = {
+                    labelDetailsSupport = true,
+                },
+            }
+        end
+
         callback(nil, initializeResult)
     end,
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/benlubas/neorg-interim-ls/compare/v1.0.1...v1.1.0) (2024-07-08)
+
+
+### Features
+
+* configurable completion + completion docs ([43b08cc](https://github.com/benlubas/neorg-interim-ls/commit/43b08cc1f53e6562f91570f21e2d10162990a37b))
+* lsp auto completion ([48f92cc](https://github.com/benlubas/neorg-interim-ls/commit/48f92ccad29bbb16aac562bb512fdd9556254e6b))
+
 ## [1.0.1](https://github.com/benlubas/neorg-interim-ls/compare/v1.0.0...v1.0.1) (2024-07-02)
 
 

@@ -45,9 +45,17 @@ module.setup = function()
             "core.neorgcmd",
             "core.ui.text_popup",
             "external.refactor",
+            "external.lsp-completion",
         },
     }
 end
+
+module.config.public = {
+    completion_provider = {
+        -- Enable or disable the completion provider
+        enable = true,
+    },
+}
 
 local dirman, refactor, ts
 module.load = function()
@@ -112,11 +120,26 @@ module.private.handlers = {
                 },
             },
             serverInfo = {
-                name = "neorg-refactor-ls",
+                name = "neorg-interim-ls",
                 version = "0.0.1",
             },
         }
+
+        if module.config.public.completion_provider.enable then
+            initializeResult.capabilities.completionProvider = {
+                triggerCharacters = { "@", "-", "(", " ", ".", ":", "#", "*", "^", "[" },
+                resolveProvider = false,
+                completionItem = {
+                    labelDetailsSupport = true,
+                },
+            }
+        end
+
         callback(nil, initializeResult)
+    end,
+
+    ["textDocument/completion"] = function(p, c, _)
+        module.required["external.lsp-completion"].completion_handler(p, c, _)
     end,
 
     ["textDocument/prepareRename"] = function(params, callback, _notify_reply_callback)
@@ -157,7 +180,7 @@ module.private.start_lsp = function()
     -- https://github.com/jmbuhr/otter.nvim/pull/137/files
     vim.lsp.start({
         name = "neorg-interim-ls",
-        capabilities = vim.lsp.protocol.make_client_capabilities(),
+        -- capabilities = vim.lsp.protocol.make_client_capabilities(),
         cmd = function(_dispatchers)
             local members = {
                 trace = "messages",

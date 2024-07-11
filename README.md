@@ -73,7 +73,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 First ensure that you're able to get LSP completions in some way. This will vary by completion
 plugin. For nvim-cmp you will need the `nvim-cmp-lsp` source. For mini-completion things should work
-out of the box. If you're using nvim's building omnifunc, I trust you know what you're doing.
+out of the box. If you're using nvim's builtin omnifunc, I trust you know what you're doing.
 
 Then, configure Neorg's completion module like this:
 

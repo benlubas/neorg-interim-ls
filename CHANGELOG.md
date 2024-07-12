@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/benlubas/neorg-interim-ls/compare/v1.1.0...v1.2.0) (2024-07-12)
+
+
+### Features
+
+* category completions via neorg-se ([5fefab9](https://github.com/benlubas/neorg-interim-ls/commit/5fefab908b25b6b9fffa02c5413221fe6a43d2e5))
+
 ## [1.1.0](https://github.com/benlubas/neorg-interim-ls/compare/v1.0.1...v1.1.0) (2024-07-08)
 
 

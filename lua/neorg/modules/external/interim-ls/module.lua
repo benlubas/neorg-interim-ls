@@ -54,10 +54,17 @@ module.config.public = {
     completion_provider = {
         -- Enable or disable the completion provider
         enable = true,
+
+        -- Try to complete categories provided by Neorg SE
+        categories = false,
     },
 }
 
-local dirman, refactor, ts
+local dirman ---@type core.dirman
+local refactor ---@type external.refactor
+local ts ---@type core.integrations.treesitter
+local lsp_completion ---@type external.lsp-completion
+
 module.load = function()
     module.required["core.neorgcmd"].add_commands_from_table({
         lsp = {
@@ -84,11 +91,10 @@ module.load = function()
             },
         },
     })
-    ---@type core.integrations.treesitter
     ts = module.required["core.integrations.treesitter"]
     dirman = module.required["core.dirman"]
-    ---@type external.refactor
     refactor = module.required["external.refactor"]
+    lsp_completion = module.required["external.lsp-completion"]
 
     vim.api.nvim_create_autocmd("FileType", {
         pattern = "norg",
@@ -139,7 +145,15 @@ module.private.handlers = {
     end,
 
     ["textDocument/completion"] = function(p, c, _)
-        module.required["external.lsp-completion"].completion_handler(p, c, _)
+        -- Attempt to hijack completion for categories completions
+        if module.config.public.completion_provider.categories then
+            local cats = lsp_completion.category_completion()
+            if cats and not vim.tbl_isempty(cats) then
+                c(nil, lsp_completion.category_completion())
+                return
+            end
+        end
+        lsp_completion.completion_handler(p, c, _)
     end,
 
     ["textDocument/prepareRename"] = function(params, callback, _notify_reply_callback)

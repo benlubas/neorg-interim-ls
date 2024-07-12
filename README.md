@@ -38,6 +38,9 @@ Install this plugin the way you would any other, and load it by adding this to y
         completion_provider = {
             -- enable/disable the completion provider. On by default.
             enable = true,
+
+            -- Try to complete categories. Requires benlubas/neorg-se
+            categories = false,
         }
     }
 },

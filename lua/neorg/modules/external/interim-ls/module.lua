@@ -202,7 +202,7 @@ module.private.start_lsp = function()
                     if module.private.handlers[method] then
                         module.private.handlers[method](params, callback, notify_reply_callback)
                     else
-                        log.warn("Unexpected LSP method: " .. method)
+                        log.debug("Unexpected LSP method: " .. method)
                     end
                 end,
                 notify = function(_method, _params) end,

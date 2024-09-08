@@ -202,10 +202,12 @@ module.public = {
         local buf = vim.uri_to_bufnr(request.textDocument.uri)
         local full_line = vim.api.nvim_buf_get_lines(buf, line_num, line_num + 1, false)[1]
 
+        local before_char = (request.context and request.context.triggerCharacter) or full_line:sub(col_num, col_num)
+
         return {
             start_offset = col_num + 1,
             char = col_num,
-            before_char = request.context.triggerCharacter,
+            before_char = before_char,
             line_number = request.position.line,
             column = col_num + 1,
             buffer = buf,

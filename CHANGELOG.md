@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.1](https://github.com/benlubas/neorg-interim-ls/compare/v1.2.0...v1.2.1) (2024-09-08)
+
+
+### Bug Fixes
+
+* less loud error on unknown LSP method ([6c65ae2](https://github.com/benlubas/neorg-interim-ls/commit/6c65ae2ec0759cf23caf3f129e05d5336508ddda))
+* nil check to enable builtin completion ([#8](https://github.com/benlubas/neorg-interim-ls/issues/8)) ([2d97404](https://github.com/benlubas/neorg-interim-ls/commit/2d974043c5603e316375a87c1a7dbe8440d42e22))
+
 ## [1.2.0](https://github.com/benlubas/neorg-interim-ls/compare/v1.1.0...v1.2.0) (2024-07-12)
 
 

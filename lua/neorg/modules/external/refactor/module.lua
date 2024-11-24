@@ -297,7 +297,7 @@ module.public = {
 ---or nil if this shouldn't be changed
 module.private.fix_links = function(source, fix_link)
     local links = nil
-    links = module.private.get_links(source)
+    links = module.public.get_links(source)
 
     local edits = {}
     for _, link in ipairs(links) do
@@ -337,7 +337,7 @@ end
 ---fetch all the links in the given buffer
 ---@param source number | string bufnr or full path to file
 ---@return Link[]
-module.private.get_links = function(source)
+module.public.get_links = function(source)
     local link_query_string = [[
         (link_location
             file: (_)* @file

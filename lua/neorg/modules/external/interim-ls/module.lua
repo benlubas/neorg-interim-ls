@@ -109,6 +109,7 @@ module.private.handlers = {
                 renameProvider = {
                     prepareProvider = true,
                 },
+                referencesProvider = true,
                 workspace = {
                     fileOperations = {
                         willRename = {
@@ -186,6 +187,53 @@ module.private.handlers = {
             local new = vim.uri_to_fname(files.newUri)
             refactor.rename_file(old, new)
         end
+    end,
+
+    ["textDocument/references"] = function(params, callback, _notify_reply_callbac)
+        local workspace_path = dirman.get_current_workspace()[2]
+        local name = vim.api.nvim_buf_get_name(0)
+        local linenr = params.position.line
+        local line = vim.api.nvim_buf_get_lines(0, linenr, linenr + 1, false)[1]
+        local references = require("neorg.modules.external.interim-ls.references")
+
+        local type, text = line:match([[%s*(.-) (.*)]])
+        if not type or not type:match("[%^%$%*]") then
+            return callback(nil, {})
+        end
+
+        text = text:gsub("%(.-%)", "")
+        text = text:gsub("%(", "\\(")
+        text = text:gsub("%)", "\\)")
+        text = text:gsub("%^", "\\^")
+        text = text:gsub("%$", "\\$")
+        text = vim.trim(text)
+
+        local reg = references.build_backlink_regex(workspace_path, name, { text = text, type = type })
+        local links = refactor.get_links(0)
+        local current_uri = vim.uri_from_bufnr(0)
+        local local_links = vim.iter(links)
+            :filter(function(l)
+                return l.type and (l.type.text == "# " or l.type.text == type .. " ") and l.text.text == text
+            end)
+            :map(function(l)
+                local r = vim.lsp.util.make_given_range_params(
+                    { l.range[1] + 1, l.range[2] },
+                    { l.range[3] + 1, l.range[4] }
+                )
+                return { uri = current_uri, range = r.range }
+            end)
+            :totable()
+
+        references.run_grep(
+            reg,
+            workspace_path,
+            vim.schedule_wrap(function(res)
+                for _, v in ipairs(local_links) do
+                    table.insert(res, v)
+                end
+                callback(nil, res)
+            end)
+        )
     end,
 }
 

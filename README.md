@@ -4,6 +4,7 @@ Neorg's missing language server.
 
 -   Rename files and headers in your norg files without breaking links in the rest of the workspace
 -   Get neorg completions without needing an auto completion plugin
+-   Jump to references from headings, links, or definitions
 
 ---
 
@@ -26,7 +27,13 @@ completions (not just those using `nvim-cmp` or `coq-nvim`).
 ## Limitations
 
 -   Links that include a file path to their own file (ie. `{:path/to/blah:}` while in `blah.norg`)
-    are not supported in refactoring operations. But like, just don't do that.
+    are not supported in **refactoring operations**. But like, just don't do that.
+-   The implementation for goto references uses rg for references outside of the current file. This
+    is in the name of speed. Parsing everything with TS each time you need to find references is not
+    really fast enough for my liking.
+    -   The regex that we use will work 100% of the time as long as you use `{:$/path/to/file:}`
+        syntax for file paths 100% of the time. (this is what autocomplete suggests, so this is not
+        hard to do).
 
 ## Install
 
@@ -50,8 +57,9 @@ Install this plugin the way you would any other, and load it by adding this to y
 
 In addition to the Neorg module config above (which can be excluded as usual if you use the
 defaults), this module is affected by LSP configuration. Keybinds should be setup by you in an
-autocommand on the `LspAttach` event. Please note the only action you will need for this LS is the
-rename action, but this autocommand is used for _all_ of your configured language servers.
+autocommand on the `LspAttach` event. Please note the only actions you will need for this LS are the
+rename, and references actions, but this autocommand is used for _all_ of your configured language
+servers.
 
 ```lua
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -66,6 +74,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
         local opts = { noremap = true, silent = true, buffer = bufnr }
         vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+        vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
 
         -- ... your other lsp mappings
     end
@@ -94,7 +103,7 @@ Refactoring works just like a normal LSP:
 -   rename/move a file: handled by `willRename` which is supported by some file manager plugins such
     as [Oil.nvim](https://github.com/steavearc/oil.nvim)
 
-Additionally, there are Neorg commands that that can accomplish the same things (though they are less convienient):
+Additionally, there are Neorg commands that that can accomplish the same things (though they are less convenient):
 
 -   `:Neorg lsp rename file`
 -   `:Neorg lsp rename heading`

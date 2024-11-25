@@ -13,22 +13,28 @@ neorg completions the same way you get completions from other language servers.
 
 local neorg = require("neorg.core")
 local modules, utils = neorg.modules, neorg.utils
+local Path = require("pathlib")
 
 local module = modules.create("external.lsp-completion")
-local ts ---@type core.integrations.treesitter
+---@type core.integrations.treesitter
+local ts
 local search
+---@type core.dirman.utils
+local dirman_utils
 
 module.setup = function()
     return {
         success = true,
         requires = {
             "core.integrations.treesitter",
+            "core.dirman.utils",
         },
     }
 end
 
 module.load = function()
     ts = module.required["core.integrations.treesitter"]
+    dirman_utils = module.required["core.dirman.utils"]
 end
 
 module.private = {
@@ -96,6 +102,23 @@ module.public = {
 
             callback(nil, completions)
         end
+    end,
+
+    ---Generate context string for the completion
+    ---@param params lsp.CompletionItem
+    resolve_handler = function(params)
+        if params.kind == 17 then -- file
+            local path = params.label:gsub(":?%}?", "")
+            local expanded_path = dirman_utils.expand_pathlib(path)
+            local f = io.open(tostring(expanded_path), "r")
+            if f then
+                params.documentation = {
+                    value = ("```norg\n%s\n```"):format(f:read("*a")),
+                    kind = "markdown",
+                }
+            end
+        end
+        return params
     end,
 
     ---Provide categories as a completion source,

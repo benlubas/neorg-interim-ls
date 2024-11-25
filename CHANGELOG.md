@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/benlubas/neorg-interim-ls/compare/v1.2.1...v1.3.0) (2024-11-25)
+
+
+### Features
+
+* references ([#9](https://github.com/benlubas/neorg-interim-ls/issues/9)) ([ed7b043](https://github.com/benlubas/neorg-interim-ls/commit/ed7b043a1fd9fe06ac00ff3938aa1fefd6502715))
+
 ## [1.2.1](https://github.com/benlubas/neorg-interim-ls/compare/v1.2.0...v1.2.1) (2024-09-08)
 
 

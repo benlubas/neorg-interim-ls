@@ -55,7 +55,10 @@ module.config.public = {
         -- Enable or disable the completion provider
         enable = true,
 
-        -- Try to complete categories provided by Neorg SE
+        -- show file contents as documentation when you complete a file name
+        documentation = true,
+
+        -- Try to complete categories provided by Neorg SE. Requires neorg SE
         categories = false,
     },
 }
@@ -135,7 +138,7 @@ module.private.handlers = {
         if module.config.public.completion_provider.enable then
             initializeResult.capabilities.completionProvider = {
                 triggerCharacters = { "@", "-", "(", " ", ".", ":", "#", "*", "^", "[" },
-                resolveProvider = false,
+                resolveProvider = module.config.public.completion_provider.documentation,
                 completionItem = {
                     labelDetailsSupport = true,
                 },
@@ -234,6 +237,11 @@ module.private.handlers = {
                 callback(nil, res)
             end)
         )
+    end,
+
+    ["completionItem/resolve"] = function(params, callback, _)
+        local res = lsp_completion.resolve_handler(params)
+        callback(nil, res)
     end,
 }
 

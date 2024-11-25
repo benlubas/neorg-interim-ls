@@ -42,9 +42,13 @@ Install this plugin the way you would any other, and load it by adding this to y
 ```lua
 ["external.interim-ls"] = {
     config = {
+        -- default config shown
         completion_provider = {
             -- enable/disable the completion provider. On by default.
             enable = true,
+
+            -- show file contents as documentation when you complete a file name
+            documentation = true,
 
             -- Try to complete categories. Requires benlubas/neorg-se
             categories = false,

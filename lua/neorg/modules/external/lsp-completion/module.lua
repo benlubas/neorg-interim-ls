@@ -13,14 +13,16 @@ neorg completions the same way you get completions from other language servers.
 
 local neorg = require("neorg.core")
 local modules, utils = neorg.modules, neorg.utils
-local Path = require("pathlib")
 
 local module = modules.create("external.lsp-completion")
+
 ---@type core.integrations.treesitter
 local ts
-local search
+
 ---@type core.dirman.utils
 local dirman_utils
+
+local query
 
 module.setup = function()
     return {
@@ -39,22 +41,26 @@ end
 
 module.private = {
     ---Query neorg SE for a list of categories, and format them into completion items
-    make_category_suggestions = function()
-        if not search then
-            module.private.load_search()
+    make_category_suggestions = function(cb)
+        if not query then
+            module.private.load_query()
         end
 
-        local categories = search.get_categories()
-        return vim.iter(categories)
-            :map(function(c)
-                return { label = c, kind = 12 } -- 12 == "Value"
-            end)
-            :totable()
+        query.list_categories(function(categories)
+            cb(
+                nil,
+                vim.iter(categories)
+                    :map(function(c)
+                        return { label = c, kind = 12 } -- 12 == "Value"
+                    end)
+                    :totable()
+            )
+        end)
     end,
 
-    load_search = function()
-        if modules.load_module("external.search") then
-            search = modules.get_module("external.search")
+    load_query = function()
+        if modules.load_module("external.query") then
+            query = modules.get_module("external.query")
         end
     end,
 }
@@ -122,7 +128,7 @@ module.public = {
     end,
 
     ---Provide categories as a completion source,
-    category_completion = function()
+    category_completion = function(cb)
         local norg_query = utils.ts_parse_query(
             "norg",
             [[
@@ -137,11 +143,11 @@ module.public = {
 
         local norg_parser, iter_src = ts.get_ts_parser(0)
         if not norg_parser then
-            return {}
+            return false
         end
         local norg_tree = norg_parser:parse()[1]
         if not norg_tree then
-            return {}
+            return false
         end
 
         local meta_node
@@ -152,14 +158,14 @@ module.public = {
         end
 
         if not meta_node then
-            return {}
+            return false
         end
 
         local meta_source = ts.get_node_text(meta_node, iter_src)
         local norg_meta_parser = vim.treesitter.get_string_parser(meta_source, "norg_meta")
         local norg_meta_tree = norg_meta_parser:parse()[1]
         if not norg_meta_tree then
-            return {}
+            return false
         end
 
         local meta_query = utils.ts_parse_query(
@@ -183,7 +189,8 @@ module.public = {
 
                 local cursor = vim.api.nvim_win_get_cursor(0)
                 if cursor[1] - 1 >= range.row_start and cursor[1] - 1 <= range.row_end then
-                    return module.private.make_category_suggestions()
+                    module.private.make_category_suggestions(cb)
+                    return true
                 end
             end
         end

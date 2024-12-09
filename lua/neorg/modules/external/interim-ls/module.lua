@@ -55,10 +55,10 @@ module.config.public = {
         -- Enable or disable the completion provider
         enable = true,
 
-        -- show file contents as documentation when you complete a file name
+        -- Show file contents as documentation when you complete a file name
         documentation = true,
 
-        -- Try to complete categories provided by Neorg SE. Requires neorg SE
+        -- Try to complete categories provided by Neorg Query. Requires `benlubas/neorg-query`
         categories = false,
     },
 }
@@ -148,16 +148,12 @@ module.private.handlers = {
         callback(nil, initializeResult)
     end,
 
-    ["textDocument/completion"] = function(p, c, _)
-        -- Attempt to hijack completion for categories completions
-        if module.config.public.completion_provider.categories then
-            local cats = lsp_completion.category_completion()
-            if cats and not vim.tbl_isempty(cats) then
-                c(nil, lsp_completion.category_completion())
-                return
-            end
+    ["textDocument/completion"] = function(p, cb, _)
+        -- Attempt to hijack completion for category completions
+        if module.config.public.completion_provider.categories and lsp_completion.category_completion(cb) then
+            return
         end
-        lsp_completion.completion_handler(p, c, _)
+        lsp_completion.completion_handler(p, cb, _)
     end,
 
     ["textDocument/prepareRename"] = function(params, callback, _notify_reply_callback)

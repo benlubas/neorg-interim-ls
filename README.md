@@ -1,10 +1,9 @@
 # neorg-interim-ls
 
-Neorg's missing language server.
+_Neorg's missing language server._
 
--   Rename files and headers in your norg files without breaking links in the rest of the workspace
--   Get neorg completions without needing an auto completion plugin
--   Jump to references from headings, links, or definitions
+Rename files and headers, completions without an auto complete plugin, category completions,
+jump to references from headings, links, or definitions
 
 ---
 
@@ -12,23 +11,28 @@ This module is labeled "interim" because it is meant to be temporary. Ideally, t
 superseded in a month or two by a "real" language server. But for the time being, the real LS is
 blocked, so I've written this.
 
-This module provides a way to move files and rename headings without breaking existing links to or
-from the file/heading. Works on all files in the workspace, if a file is open, it will use the
-buffer contents instead of the file contents so unsaved changes are accounted for.
+## Features
 
-Relative file links like `{/ ./path/to/file.txt}` are also changed when a file is moved.
+-   Move files and rename headings without breaking existing links to or
+    from the file/heading.
 
-Moving a file to a location that already exists will fail with an error. Moving a file to a folder
-that doesn't exist will create the folder.
+    -   Works on all files in the workspace
+    -   if a file is open, it will use the buffer contents instead of the file contents so unsaved
+        changes are accounted for.
+    -   Relative file links like `{/ ./path/to/file.txt}` are also changed when a file is moved.
+    -   Moving a file to a location that already exists will fail with an error. Moving a file to a folder
+        that doesn't exist will create the folder.
 
-Additionally, this plugin provides a completion engine for Neorg that allows anyone to get Neorg
-completions (not just those using `nvim-cmp` or `coq-nvim`).
+-   Provides a completion engine for Neorg that allows anyone to get Neorg completions (not just
+    those using `nvim-cmp` or `coq-nvim`).
+-   Complete category names with categories from your workspace
+-   Show document content when completing file names
 
 ## Limitations
 
 -   Links that include a file path to their own file (ie. `{:path/to/blah:}` while in `blah.norg`)
     are not supported in **refactoring operations**. But like, just don't do that.
--   The implementation for goto references uses rg for references outside of the current file. This
+-   The implementation for goto references uses `rg` for references outside of the current file. This
     is in the name of speed. Parsing everything with TS each time you need to find references is not
     really fast enough for my liking.
     -   The regex that we use will work 100% of the time as long as you use `{:$/path/to/file:}`
@@ -44,13 +48,13 @@ Install this plugin the way you would any other, and load it by adding this to y
     config = {
         -- default config shown
         completion_provider = {
-            -- enable/disable the completion provider. On by default.
+            -- Enable or disable the completion provider
             enable = true,
 
-            -- show file contents as documentation when you complete a file name
+            -- Show file contents as documentation when you complete a file name
             documentation = true,
 
-            -- Try to complete categories. Requires benlubas/neorg-se
+            -- Try to complete categories provided by Neorg Query. Requires `benlubas/neorg-query`
             categories = false,
         }
     }

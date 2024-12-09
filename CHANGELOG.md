@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/benlubas/neorg-interim-ls/compare/v1.3.0...v2.0.0) (2024-12-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* use neorg-query instead of neorg-se ([#12](https://github.com/benlubas/neorg-interim-ls/issues/12))
+
+### Features
+
+* use neorg-query instead of neorg-se ([#12](https://github.com/benlubas/neorg-interim-ls/issues/12)) ([30f0f6a](https://github.com/benlubas/neorg-interim-ls/commit/30f0f6a5be7aa464a0f20b3c729ab8d0fe500a60))
+
 ## [1.3.0](https://github.com/benlubas/neorg-interim-ls/compare/v1.2.1...v1.3.0) (2024-11-25)
 
 

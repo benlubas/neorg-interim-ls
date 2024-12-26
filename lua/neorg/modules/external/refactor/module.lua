@@ -355,7 +355,12 @@ module.public.get_links = function(source)
         if vim.fn.bufexists(source) == 1 then
             source = vim.uri_to_bufnr(vim.uri_from_fname(source))
         else
-            iter_src = io.open(source, "r"):read("*a")
+            local file = io.open(source, "r")
+            if not file then
+                log.warn(("[refactor] unable to open file `%s` for reading"):format(file))
+                return {}
+            end
+            iter_src = file:read("*a")
             norg_parser = vim.treesitter.get_string_parser(iter_src, "norg")
         end
     end

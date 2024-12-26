@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/benlubas/neorg-interim-ls/compare/v2.0.0...v2.0.1) (2024-12-26)
+
+
+### Bug Fixes
+
+* nil check file open ([#14](https://github.com/benlubas/neorg-interim-ls/issues/14)) ([b5ee7cf](https://github.com/benlubas/neorg-interim-ls/commit/b5ee7cfbe5fec0bfadd2b534442fe4890c22f593))
+
 ## [2.0.0](https://github.com/benlubas/neorg-interim-ls/compare/v1.3.0...v2.0.0) (2024-12-09)
 
 

@@ -22,6 +22,9 @@ local ts
 ---@type core.dirman.utils
 local dirman_utils
 
+---@type core.dirman
+local dirman
+
 local query
 
 module.setup = function()
@@ -30,6 +33,7 @@ module.setup = function()
         requires = {
             "core.integrations.treesitter",
             "core.dirman.utils",
+            "core.dirman",
         },
     }
 end
@@ -37,6 +41,7 @@ end
 module.load = function()
     ts = module.required["core.integrations.treesitter"]
     dirman_utils = module.required["core.dirman.utils"]
+    dirman = module.required["core.dirman"]
 end
 
 module.private = {
@@ -50,10 +55,10 @@ module.private = {
             cb(
                 nil,
                 vim.iter(categories)
-                    :map(function(c)
-                        return { label = c, kind = 12 } -- 12 == "Value"
-                    end)
-                    :totable()
+                :map(function(c)
+                    return { label = c, kind = 12 }     -- 12 == "Value"
+                end)
+                :totable()
             )
         end)
     end,
@@ -62,6 +67,47 @@ module.private = {
         if modules.load_module("external.query") then
             query = modules.get_module("external.query")
         end
+    end,
+
+    make_name_suggestions = function(people_path, params, cb)
+        local ws_path = dirman.get_current_workspace()[2]
+        local file = dirman_utils.expand_pathlib(ws_path / people_path)
+        local people_headers = require("neorg.modules.core.completion.module").private.get_linkables(file, "generic")
+        local pos = params.position
+        local cursor_col = vim.api.nvim_win_get_cursor(0)[2]
+        local line = vim.api.nvim_buf_get_lines(0, params.position.line, params.position.line + 1, false)[1]
+        local plus1 = line:sub(cursor_col+1, cursor_col+1) == "}" and 1 or 0
+        local ate = {
+            {
+                range = {
+                    start = { line = pos.line, character = pos.character - 3 },
+                    ["end"] = { line = pos.line, character = pos.character },
+                },
+                newText = "",
+            },
+        }
+
+        cb(
+            nil,
+            vim.iter(people_headers)
+            :map(function(x)
+                local first_name = x.title:match("^(%w*)")
+                return {
+                    label = x.title,
+                    kind = 18,     -- Reference
+                    textEdit = {
+                        range = {
+                            start = { line = pos.line, character = pos.character },
+                            ["end"] = { line = pos.line, character = cursor_col + plus1 },
+                        },
+                        newText = ("[%s]{:$/%s:# %s}"):format(first_name, people_path, x.title),
+                    },
+                    additionalTextEdits = ate,
+                }
+            end)
+            :totable()
+        )
+        return true
     end,
 }
 
@@ -194,6 +240,18 @@ module.public = {
                 end
             end
         end
+    end,
+
+    people_completion = function(path, params, cb)
+        local buf = vim.uri_to_bufnr(params.textDocument.uri)
+        local line = vim.api.nvim_buf_get_lines(buf, params.position.line, params.position.line + 1, false)[1]
+        local pos = vim.api.nvim_win_get_cursor(0)
+        line = line:sub(1, pos[2])
+        if line:match("{@%w[^}]*$") then
+            module.private.make_name_suggestions(path, params, cb)
+            return true
+        end
+        return false
     end,
 
     -- {

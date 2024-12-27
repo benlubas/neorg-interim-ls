@@ -25,8 +25,11 @@ blocked, so I've written this.
 
 -   Provides a completion engine for Neorg that allows anyone to get Neorg completions (not just
     those using `nvim-cmp` or `coq-nvim`).
--   Complete category names with categories from your workspace
+-   Complete category names with categories from your workspace (via [neorg-query](https://github.com/benlubas/neorg-query))
 -   Show document content when completing file names
+-   Complete `{@name}` to `[name]{:$/people:# name}`
+    -   `[name]` is just the first name, `people` is configurable, you must accept the completion
+        (default is `<c-y>`) to avoid broken syntax.
 
 ## Limitations
 
@@ -56,6 +59,19 @@ Install this plugin the way you would any other, and load it by adding this to y
 
             -- Try to complete categories provided by Neorg Query. Requires `benlubas/neorg-query`
             categories = false,
+
+            -- suggest heading completions from the given file for `{@x|}` where `|` is your cursor
+            -- and `x` is an alphanumeric character. `{@name}` expands to `[name]{:$/people:# name}`
+            people = {
+                enable = false,
+
+                -- path to the file you're like to use with the `{@x` syntax, relative to the
+                -- workspace root, without the `.norg` at the end.
+                -- ie. `folder/people` results in searching `$/folder/people.norg` for headings.
+                -- Note that this will change with your workspace, so it fails silently if the file
+                -- doesn't exist
+                path = "people",
+            }
         }
     }
 },
@@ -105,13 +121,15 @@ Then, configure Neorg's completion module like this:
 
 ## Usage
 
-Refactoring works just like a normal LSP:
+Refactoring and completion work just like a normal LSP:
 
+-   type for completions, ensure that you enable category and/or people completions if you want them.
 -   rename a heading: done with `:h vim.lsp.buf.rename()`
 -   rename/move a file: handled by `willRename` which is supported by some file manager plugins such
     as [Oil.nvim](https://github.com/steavearc/oil.nvim)
 
-Additionally, there are Neorg commands that that can accomplish the same things (though they are less convenient):
+Additionally, there are Neorg commands for the refactoring operations (though they are less
+convenient than using the regular lsp interface):
 
 -   `:Neorg lsp rename file`
 -   `:Neorg lsp rename heading`

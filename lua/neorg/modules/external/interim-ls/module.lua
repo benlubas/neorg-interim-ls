@@ -60,6 +60,19 @@ module.config.public = {
 
         -- Try to complete categories provided by Neorg Query. Requires `benlubas/neorg-query`
         categories = false,
+
+        -- suggest heading completions from the given file for `{@x|}` where `|` is your cursor
+        -- and `x` is an alphanumeric character. `{@name}` expands to `[name]{:$/people:# name}`
+        people = {
+            enable = false,
+
+            -- path to the file you're like to use with the `{@x` syntax, relative to the
+            -- workspace root, without the `.norg` at the end.
+            -- ie. `folder/people` results in searching `$/folder/people.norg` for headings.
+            -- Note that this will change with your workspace, so it fails silently if the file
+            -- doesn't exist
+            path = "people",
+        },
     },
 }
 
@@ -151,6 +164,12 @@ module.private.handlers = {
     ["textDocument/completion"] = function(p, cb, _)
         -- Attempt to hijack completion for category completions
         if module.config.public.completion_provider.categories and lsp_completion.category_completion(cb) then
+            return
+        end
+        if
+            module.config.public.completion_provider.people.enable
+            and lsp_completion.people_completion(module.config.public.completion_provider.people.path, p, cb)
+        then
             return
         end
         lsp_completion.completion_handler(p, cb, _)

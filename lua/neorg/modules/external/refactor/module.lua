@@ -145,7 +145,7 @@ module.public = {
         end
 
         if not Path(new_path):parent():exists() then
-            Path(new_path):parent():mkdir(750, true)
+            Path(new_path):parent():mkdir(Path.permission("rwxr-xr-x"), true)
         end
         vim.api.nvim_buf_delete(buf, {})
         vim.lsp.util.apply_workspace_edit(wsEdit, "utf-8")

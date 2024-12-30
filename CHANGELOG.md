@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.1.0](https://github.com/benlubas/neorg-interim-ls/compare/v2.0.1...v2.1.0) (2024-12-30)
+
+
+### Features
+
+* people completions ([#16](https://github.com/benlubas/neorg-interim-ls/issues/16)) ([832df77](https://github.com/benlubas/neorg-interim-ls/commit/832df7774bea4c0d3cf934bbd9d450894b80f944))
+
+
+### Bug Fixes
+
+* new directory permissions ([#18](https://github.com/benlubas/neorg-interim-ls/issues/18)) ([5aec3bb](https://github.com/benlubas/neorg-interim-ls/commit/5aec3bb82a774dce797e5796d3be906aa3361650))
+
 ## [2.0.1](https://github.com/benlubas/neorg-interim-ls/compare/v2.0.0...v2.0.1) (2024-12-26)
 
 

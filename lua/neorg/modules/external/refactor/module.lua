@@ -28,10 +28,11 @@ end
 
 local dirman, dirman_utils, ts
 module.load = function()
-    -- TODO: how would I get types in here?
     ---@type core.integrations.treesitter
     ts = module.required["core.integrations.treesitter"]
+    ---@type core.dirman
     dirman = module.required["core.dirman"]
+    ---@type core.dirman.utils
     dirman_utils = module.required["core.dirman.utils"]
 end
 
@@ -123,7 +124,9 @@ module.public = {
                     ---@type PathlibPath | nil
                     local new_link
                     if rel then
-                        new_link = Path(new_path):relative_to(Path(file):parent())
+                        local parent = Path(file):parent()
+                        assert(parent, "`/` is not a norg file, this shouldn't be possible")
+                        new_link = Path(new_path):relative_to(parent)
                         if not new_link then
                             return
                         end
@@ -145,10 +148,12 @@ module.public = {
         end
 
         if not Path(new_path):parent():exists() then
-            Path(new_path):parent():mkdir(Path.permission("rwxr-xr-x"), true)
+            if not Path(new_path):parent():mkdir(Path.permission("rwxr-xr-x"), true) then
+                return false
+            end
         end
-        vim.api.nvim_buf_delete(buf, {})
         vim.lsp.util.apply_workspace_edit(wsEdit, "utf-8")
+        vim.api.nvim_buf_delete(buf, {})
         vim.notify(
             ("[Neorg] renamed %s to %s\nChanged %d links across %d files."):format(
                 current_path,
@@ -361,6 +366,7 @@ module.public.get_links = function(source)
                 return {}
             end
             iter_src = file:read("*a")
+            file:close()
             norg_parser = vim.treesitter.get_string_parser(iter_src, "norg")
         end
     end

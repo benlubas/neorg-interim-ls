@@ -309,7 +309,7 @@ module.private["interim-ls.rename.file"] = function(event)
         vim.schedule(function()
             vim.ui.input({ prompt = "New Path: ", default = current }, function(text)
                 refactor.rename_file(current, text)
-                vim.cmd.e(text)
+                vim.schedule(function() vim.cmd.e(text) end)
             end)
         end)
     end

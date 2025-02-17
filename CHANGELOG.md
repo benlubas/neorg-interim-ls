@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/benlubas/neorg-interim-ls/compare/v2.1.0...v2.1.1) (2025-02-17)
+
+
+### Bug Fixes
+
+* close file descriptor, add more checks ([#20](https://github.com/benlubas/neorg-interim-ls/issues/20)) ([8aa6c4c](https://github.com/benlubas/neorg-interim-ls/commit/8aa6c4cb14c17704366227ac8bdfdcab82dc6f8a))
+
 ## [2.1.0](https://github.com/benlubas/neorg-interim-ls/compare/v2.0.1...v2.1.0) (2024-12-30)
 
 

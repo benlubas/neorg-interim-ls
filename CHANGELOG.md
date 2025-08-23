@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.2](https://github.com/benlubas/neorg-interim-ls/compare/v2.1.1...v2.1.2) (2025-08-23)
+
+
+### Bug Fixes
+
+* convert utf-8 index to byte-offset to get line ([#23](https://github.com/benlubas/neorg-interim-ls/issues/23)) ([52bdf8a](https://github.com/benlubas/neorg-interim-ls/commit/52bdf8a8cd246a9205756449776aa057bd593d61))
+
 ## [2.1.1](https://github.com/benlubas/neorg-interim-ls/compare/v2.1.0...v2.1.1) (2025-02-17)
 
 

@@ -290,6 +290,8 @@ module.public = {
         local buf = vim.uri_to_bufnr(request.textDocument.uri)
         local full_line = vim.api.nvim_buf_get_lines(buf, line_num, line_num + 1, false)[1]
 
+        local i = vim.str_byteindex(full_line, col_num)
+
         local before_char = (request.context and request.context.triggerCharacter) or full_line:sub(col_num, col_num)
 
         return {
@@ -299,7 +301,7 @@ module.public = {
             line_number = request.position.line,
             column = col_num + 1,
             buffer = buf,
-            line = full_line:sub(1, col_num),
+            line = full_line:sub(1, i),
             -- this is never used anywhere, so it's probably safe to ignore
             -- previous_context = {
             --     line = request.context.prev_context.cursor_before_line,

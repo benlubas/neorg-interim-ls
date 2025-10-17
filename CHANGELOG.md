@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.3](https://github.com/benlubas/neorg-interim-ls/compare/v2.1.2...v2.1.3) (2025-10-17)
+
+
+### Bug Fixes
+
+* this has been here for a while ([#26](https://github.com/benlubas/neorg-interim-ls/issues/26)) ([e2f8698](https://github.com/benlubas/neorg-interim-ls/commit/e2f86982ba5857ed5581ff5814edd57b5c2c67e0))
+
 ## [2.1.2](https://github.com/benlubas/neorg-interim-ls/compare/v2.1.1...v2.1.2) (2025-08-23)
 
 

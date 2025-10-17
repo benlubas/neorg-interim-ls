@@ -59,6 +59,8 @@ module.public = {
         end
 
         local buf = vim.uri_to_bufnr(vim.uri_from_fname(current_path))
+        vim.fn.bufload(buf)
+
         local total_changed = { files = 0, links = 0 }
 
         ---@type lsp.WorkspaceEdit
@@ -187,7 +189,7 @@ module.public = {
             return
         end
 
-        local title_text = ts.get_node_text(title)
+        local title_text = vim.treesitter.get_node_text(title, buf)
         local total_changed = {
             files = 0,
             links = 0,
@@ -388,9 +390,8 @@ module.public.get_links = function(source)
         for id, node in pairs(match) do
             local name = query.captures[id]
             link[name] = {
-                text = ts.get_node_text(node, iter_src),
-                ---@diagnostic disable-next-line: undefined-field
-                range = { node:range() },
+                text = vim.treesitter.get_node_text(node[1], iter_src),
+                range = { node[1]:range() },
             }
         end
         link.range = link.link_location.range

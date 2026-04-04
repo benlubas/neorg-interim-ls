@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.4](https://github.com/benlubas/neorg-interim-ls/compare/v2.1.3...v2.1.4) (2026-04-04)
+
+
+### Bug Fixes
+
+* **ci:** update luarocks publish command ([5a71fd8](https://github.com/benlubas/neorg-interim-ls/commit/5a71fd8203d67c278b40fca174c114fa06ccb547))
+
 ## [2.1.3](https://github.com/benlubas/neorg-interim-ls/compare/v2.1.2...v2.1.3) (2025-10-17)
 
 
